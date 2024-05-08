@@ -1,0 +1,7 @@
+2024-05-07 21:15:29 INFO Starting the rules engine
+2024-05-07 21:15:30 INFO Read 1000 orders from the CSV
+2024-05-07 21:15:30 INFO Processed 1000 orders
+2024-05-07 21:15:30 INFO Oracle JDBC driver loaded successfully
+2024-05-07 21:15:31 INFO Connected to the Oracle database
+2024-05-07 21:15:32 INFO Successfully inserted 1000 orders into the database.
+2024-05-07 21:15:32 INFO Database connection closed
