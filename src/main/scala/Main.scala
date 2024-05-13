@@ -81,7 +81,7 @@ object Main extends App {
       order.quantity match {
         case q if q >= 6 && q <= 9 => 5
         case q if q >= 10 && q <= 14 => 7
-        case q if q > 15 => 10
+        case q if q >= 15 => 10
         case _ => 0
       }
     }
@@ -107,7 +107,6 @@ object Main extends App {
 
   }
 
-  // Object to apply discount rules to orders
   object DiscountProcessor {
     // Function to apply discount rules to each order and return an updated one with a discount
     def getOrderWithDiscount(
@@ -115,15 +114,26 @@ object Main extends App {
                               rules: List[(Order => Boolean, Order => BigDecimal)]
                             ): Order = {
       val applicableDiscounts = rules
-        .map { case (_, discountFunction) => discountFunction(order) }
+        .flatMap { case (condition, discountFunction) =>
+          if (condition(order)) Some(discountFunction(order))
+          else None
+        }.filter(_ != 0)
         .sorted(Ordering[BigDecimal].reverse)
-        .take(2)
-        .sum / 2 // Average the top two discounts
 
-      order.copy(discount = applicableDiscounts)
+      println(s"Applicable Discounts: $applicableDiscounts")
+
+      val discountToApply = if (applicableDiscounts.length > 1) {
+        applicableDiscounts.take(2).sum / 2 // Average of top two discounts
+      } else {
+        applicableDiscounts.sum // Sum of one or two discounts
+      }
+
+      println(s"Discount to Apply: $discountToApply") // Print discount to apply
+
+      order.copy(discount = discountToApply)
     }
-
   }
+
 
   // Object to read orders from a CSV file
   object OrderReader {
@@ -235,7 +245,7 @@ object Main extends App {
 
   processedOrders.foreach { order =>
     println(
-      s"Order timestamp: ${order.timestamp}, Product: ${order.productName}, Original Price: ${order.originalPrice}, Discount: ${order.discount}%, Final Price: ${order.finalPrice}"
+      s"Order timestamp: ${order.timestamp}, Product: ${order.productName}, quantity : ${order.quantity}, Original Price: ${order.originalPrice}, Discount: ${order.discount}%, Final Price: ${order.finalPrice}"
     )
   }
 
