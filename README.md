@@ -59,5 +59,3 @@ The project is structured to maintain a clean, functional programming approach, 
 
 --Main: The main entry point to the project. This object coordinates reading orders from the CSV file, applying the discount rules, writing to the Oracle database, and logging significant events.
 
-**Summary**
-These detailed sections offer a comprehensive understanding of the project, its structure, and how various components interact to achieve the desired functionality. You can further customize the README based on your project's specific needs and requirements.
